@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Random;
 
 public class App {
@@ -35,6 +36,9 @@ public class App {
         int maxCod = 100;
         String url = "http://online.ucn.cl/directoriotelefonicoemail/fichaGenerica/?cod=";
 
+        // method from http://decodigo.com/java-crear-archivos-de-texto
+        PrintWriter printWriter = new PrintWriter("records.txt", "UTF-8");
+
         /**
          * Random variable to interleave time.
          */
@@ -55,18 +59,18 @@ public class App {
 
         for (int i = 0; i < maxCod; i++) {
 
-            // Build the URL to check.
+            // Build the URL to check the data.
             StringBuilder actualUrl = new StringBuilder();
             actualUrl.append(url).append(i);
             Document document = Jsoup.connect(actualUrl.toString()).get();
 
-            // The id to database.
-            id = i;
-
             // Verify the index value.
             nombre = document.getElementById("lblNombre").text();
 
-            if(!nombre.isEmpty()) {
+            if (!nombre.isEmpty()) {
+
+                // The id to database.
+                id = i;
 
                 // Get variables from URL.
                 cargo = document.getElementById("lblCargo").text();
@@ -79,13 +83,23 @@ public class App {
                 // Concatenation of Functionary data.
                 StringBuilder newFunctionary = new StringBuilder();
                 newFunctionary.append(id)
+                        .append(",")
                         .append(nombre)
+                        .append(",")
                         .append(cargo)
+                        .append(",")
                         .append(unidad)
+                        .append(",")
                         .append(email)
+                        .append(",")
                         .append(telefono)
+                        .append(",")
                         .append(oficina)
+                        .append(",")
                         .append(direccion);
+
+                // Add new valid functionary to csv file.
+                printWriter.println(newFunctionary.toString());
 
                 log.debug("New identified: {}", newFunctionary.toString());
 
@@ -99,6 +113,9 @@ public class App {
             }
 
         }
+
+        // End of record insertion.
+        printWriter.close();
 
     }
 }
