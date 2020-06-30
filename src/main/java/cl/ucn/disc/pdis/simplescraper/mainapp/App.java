@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2020. Charlie Condorcet Engineering Student
+ *
+ *  This program and the accompanying materials are made available under the
+ *  terms of the Eclipse Public License 2.0 which is available at
+ *  http://www.eclipse.org/legal/epl-2.0, or the Apache License, Version 2.0
+ *  which is available at https://www.apache.org/licenses/LICENSE-2.0.
+ *
+ *  SPDX-License-Identifier: EPL-2.0 OR Apache-2.0
+ */
+
 package cl.ucn.disc.pdis.simplescraper.mainapp;
 
 import org.jsoup.Jsoup;
@@ -36,7 +47,7 @@ public class App {
         int maxCod = 100;
         String url = "http://online.ucn.cl/directoriotelefonicoemail/fichaGenerica/?cod=";
 
-        // method from http://decodigo.com/java-crear-archivos-de-texto
+        // Method from http://decodigo.com/java-crear-archivos-de-texto
         PrintWriter printWriter = new PrintWriter("records.txt", "UTF-8");
 
         /**
@@ -111,11 +122,11 @@ public class App {
                     log.error("Thread is interrupted either before or during the activity. Details: {}", e);
                 }
             }
-
         }
 
         // End of record insertion.
         printWriter.close();
+        log.info("End of insertions.");
 
     }
 }
