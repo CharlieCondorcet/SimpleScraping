@@ -25,13 +25,13 @@ public final class Functionary {
     /**
      * The id: Primary Key.
      */
-    @DatabaseField(canBeNull = false, generatedId = true)
+    @DatabaseField(generatedId = true)
     private int id;
 
     /**
      * The Nombre.
      */
-    @DatabaseField(canBeNull = false, unique = true)
+    @DatabaseField(canBeNull = false)
     private String nombre;
 
     /**

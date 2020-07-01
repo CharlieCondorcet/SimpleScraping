@@ -41,6 +41,8 @@ public class App {
     private static final Logger log = LoggerFactory.getLogger(App.class);
 
     /**
+     * Principal Main class.
+     *
      * @param args
      * @throws IOException
      */
@@ -51,17 +53,20 @@ public class App {
         Esto ultimo verificado buscando ultimos profesores agregados este semestre con id 29600 aprox.
         */
 
+
         /**
          * Database configuration.
          */
+        /*
         // Use slite database to replace h2.
         String databaseURL = "jdbc:sqlite:functionarydb.db";
         // Create a connection source to our database.
         ConnectionSource connectionSource = new JdbcConnectionSource(databaseURL);
         // Instance the DAO.
         Dao<Functionary, String> functionaryDao = DaoManager.createDao(connectionSource, Functionary.class);
-        // if you need to create the ’accounts’ table make this call
+        // if you need to create the ’accounts’ table make this call.
         TableUtils.createTableIfNotExists(connectionSource, Functionary.class);
+        /*
 
         /**
          * Auxiliaries.
@@ -113,29 +118,35 @@ public class App {
                 oficina = document.getElementById("lblOficina").text();
                 direccion = document.getElementById("lblDireccion").text();
 
+                if (direccion.length() == 0) {
+                    log.debug("VACIOS");
+                }
+
                 // Concatenation of Functionary data.
-                StringBuilder newFunctionary = new StringBuilder();
-                newFunctionary.append(id)
-                        .append(",")
-                        .append(nombre)
-                        .append(",")
-                        .append(cargo)
-                        .append(",")
-                        .append(unidad)
-                        .append(",")
-                        .append(email)
-                        .append(",")
-                        .append(telefono)
-                        .append(",")
-                        .append(oficina)
-                        .append(",")
+                StringBuilder sbFunctionary = new StringBuilder();
+                sbFunctionary.append(id).append(",")
+                        .append(nombre).append(",")
+                        .append(cargo).append(",")
+                        .append(unidad).append(",")
+                        .append(email).append(",")
+                        .append(telefono).append(",")
+                        .append(oficina).append(",")
                         .append(direccion);
 
-                log.debug("New identified: {}", newFunctionary.toString());
+                log.debug("New identified: {}", sbFunctionary.toString());
 
                 // Add new valid functionary to csv file.
-                printWriter.println(newFunctionary.toString());
+                printWriter.println(sbFunctionary.toString());
 
+                formatToDatabase(nombre,
+                        cargo,
+                        unidad,
+                        email,
+                        telefono,
+                        oficina,
+                        direccion);
+
+                /*
                 // Add new valid functionary to database.
                 Functionary functionary = new Functionary(nombre,
                         cargo,
@@ -144,14 +155,22 @@ public class App {
                         telefono,
                         oficina,
                         direccion);
-                functionaryDao.create(functionary);
+
+                // Duplicaded Functionaries.
+                try {
+                    functionaryDao.createIfNotExists(functionary);
+
+                } catch (SQLException e) {
+                    log.error("New Functionary {} no added. Details: {}", nombre, e.getMessage());
+                }
+                 */
 
                 // Time to wait not to do DDoS.
                 try {
                     Thread.sleep(1000 + random.nextInt(1000));
 
                 } catch (InterruptedException e) {
-                    log.error("Thread is interrupted either before or during the activity. Details: {}", e);
+                    log.error("Thread is interrupted either before or during the activity. Details: {}", e.getMessage());
                 }
 
                 // ID real to csv file.
@@ -161,7 +180,7 @@ public class App {
 
         // End of record insertion.
         printWriter.close();
-        connectionSource.close();
+        //connectionSource.close();
         log.info("End of insertions.");
 
         /*
@@ -169,7 +188,72 @@ public class App {
         ORM Lite documentation https://ormlite.com/javadoc/ormlite-core/doc-files/ormlite_2.html#Using
         Save scv in txt http://decodigo.com/java-crear-archivos-de-texto
          */
+    }
+
+    /**
+     * Formater to save data in database.
+     *
+     * @param nombre
+     * @param cargo
+     * @param unidad
+     * @param email
+     * @param telefono
+     * @param oficina
+     * @param direccion
+     * @return
+     * @throws SQLException
+     * @throws IOException
+     */
+    public static boolean formatToDatabase(String nombre, String cargo, String unidad, String email, String telefono,
+                                         String oficina, String direccion) throws SQLException, IOException {
+
+        /**
+         * Database configuration.
+         */
+        // Use slite database to replace h2.
+        String databaseURL = "jdbc:sqlite:functionarydb.db";
+        // Create a connection source to our database.
+        ConnectionSource connectionSource = new JdbcConnectionSource(databaseURL);
+        // Instance the DAO.
+        Dao<Functionary, String> functionaryDao = DaoManager.createDao(connectionSource, Functionary.class);
+        // if you need to create the ’accounts’ table make this call.
+        TableUtils.createTableIfNotExists(connectionSource, Functionary.class);
+
+        // Save variables like null if is empty.
+        cargo = EmptyToNUll(cargo);
+        unidad = EmptyToNUll(unidad);
+        email = EmptyToNUll(email);
+        telefono = EmptyToNUll(telefono);
+        oficina = EmptyToNUll(oficina);
+        direccion = EmptyToNUll(direccion);
+
+        // Add new valid functionary to database.
+        Functionary functionary = new Functionary(nombre,
+                cargo,
+                unidad,
+                email,
+                telefono,
+                oficina,
+                direccion);
+
+        // Duplicaded Functionaries.
+        try {
+            functionaryDao.createIfNotExists(functionary);
+
+        } catch (SQLException e) {
+            log.error("New Functionary {} no added. Details: {}", nombre, e.getMessage());
+            return false;
+        }
+
+        connectionSource.close();
+        return true;
 
     }
+
+    public static String EmptyToNUll(String var) {
+        var = var.isEmpty() ? null : var;
+        return var;
+    }
+
 
 }
