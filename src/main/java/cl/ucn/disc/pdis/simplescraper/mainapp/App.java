@@ -35,7 +35,6 @@ public class App {
     public static void main(String[] args) throws IOException {
 
         /*
-        No se captan las tildes o ñ's.
         El "cod" o el numero id al final de la url, en primer semestre de 2020, no sobrepasa los 29800.
         Esto ultimo verificado buscando ultimos profesores agregados este semestre con id 29600 aprox.
         */
@@ -87,7 +86,11 @@ public class App {
                 cargo = document.getElementById("lblCargo").text();
                 unidad = document.getElementById("lblUnidad").text();
                 email = document.getElementById("lblEmail").text();
+
                 telefono = document.getElementById("lblTelefono").text();
+                // Formate to fone number.
+                telefono = telefono.substring(5, telefono.length());
+
                 oficina = document.getElementById("lblOficina").text();
                 direccion = document.getElementById("lblDireccion").text();
 
@@ -127,6 +130,6 @@ public class App {
         // End of record insertion.
         printWriter.close();
         log.info("End of insertions.");
-
     }
+
 }
