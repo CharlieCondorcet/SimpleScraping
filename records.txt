@@ -1,4 +1,4 @@
-21,Guillermo Baltazar Chong Diaz,Director Museo Geológico Humberto Fuenzalida,Facultad de Ingeniería y Ciencias Geológicas,gchong@ucn.cl,(55) 2355745,Pab. A,Avenida Angamos 0610, Antofagasta - Chile
-24,Lautaro Nunez Atencio,Académico,Instituto de Investigaciones Arqueológicas y Museo,lnunez@ucn.cl,(55) 2851066,,Instituto de Investigaciones Arqueológicas y Museo R.P. Gustavo Le paige, San Pedro de Atacama - Chile
-29,Julio Alberto Vasquez Castro,Académico,Facultad de Ciencias del Mar,jvasquez@ucn.cl,(51) 2209809,EDIF. X / OF. 34,Larrondo N° 1281, Coquimbo - Chile
-50,Tomas Segundo Avila Rodriguez,Académico,Facultad de Ciencias,tavila@ucn.cl,(55) 2355582,Pab. N Ofic. 202,Avenida Angamos 0610, Antofagasta - Chile
+0,Guillermo Baltazar Chong Diaz,Director Museo Geológico Humberto Fuenzalida,Facultad de Ingeniería y Ciencias Geológicas,gchong@ucn.cl,(55) 2355745,Pab. A,Avenida Angamos 0610, Antofagasta - Chile
+1,Lautaro Nunez Atencio,Académico,Instituto de Investigaciones Arqueológicas y Museo,lnunez@ucn.cl,(55) 2851066,,Instituto de Investigaciones Arqueológicas y Museo R.P. Gustavo Le paige, San Pedro de Atacama - Chile
+2,Julio Alberto Vasquez Castro,Académico,Facultad de Ciencias del Mar,jvasquez@ucn.cl,(51) 2209809,EDIF. X / OF. 34,Larrondo N° 1281, Coquimbo - Chile
+3,Tomas Segundo Avila Rodriguez,Académico,Facultad de Ciencias,tavila@ucn.cl,(55) 2355582,Pab. N Ofic. 202,Avenida Angamos 0610, Antofagasta - Chile

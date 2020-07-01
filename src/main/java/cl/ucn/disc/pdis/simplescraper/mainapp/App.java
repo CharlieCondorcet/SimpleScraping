@@ -11,6 +11,12 @@
 
 package cl.ucn.disc.pdis.simplescraper.mainapp;
 
+import cl.ucn.disc.pdis.simplescraper.model.Functionary;
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.jdbc.JdbcConnectionSource;
+import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.table.TableUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -19,8 +25,14 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.Random;
 
+/**
+ * Principal App to do scraping.
+ *
+ * @author Charlie Condorect.
+ */
 public class App {
 
     /**
@@ -32,7 +44,7 @@ public class App {
      * @param args
      * @throws IOException
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, SQLException {
 
         /*
         El "cod" o el numero id al final de la url, en primer semestre de 2020, no sobrepasa los 29800.
@@ -40,13 +52,23 @@ public class App {
         */
 
         /**
+         * Database configuration.
+         */
+        // Use slite database to replace h2.
+        String databaseURL = "jdbc:sqlite:functionarydb.db";
+        // Create a connection source to our database.
+        ConnectionSource connectionSource = new JdbcConnectionSource(databaseURL);
+        // Instance the DAO.
+        Dao<Functionary, String> functionaryDao = DaoManager.createDao(connectionSource, Functionary.class);
+        // if you need to create the ’accounts’ table make this call
+        TableUtils.createTableIfNotExists(connectionSource, Functionary.class);
+
+        /**
          * Auxiliaries.
          */
         int id = 0;
         int maxCod = 100;
         String url = "http://online.ucn.cl/directoriotelefonicoemail/fichaGenerica/?cod=";
-
-        // Method from http://decodigo.com/java-crear-archivos-de-texto
         PrintWriter printWriter = new PrintWriter("records.txt", "UTF-8");
 
         /**
@@ -79,9 +101,6 @@ public class App {
 
             if (!nombre.isEmpty()) {
 
-                // The id to database.
-                id = i;
-
                 // Get variables from URL.
                 cargo = document.getElementById("lblCargo").text();
                 unidad = document.getElementById("lblUnidad").text();
@@ -112,10 +131,20 @@ public class App {
                         .append(",")
                         .append(direccion);
 
+                log.debug("New identified: {}", newFunctionary.toString());
+
                 // Add new valid functionary to csv file.
                 printWriter.println(newFunctionary.toString());
 
-                log.debug("New identified: {}", newFunctionary.toString());
+                // Add new valid functionary to database.
+                Functionary functionary = new Functionary(nombre,
+                        cargo,
+                        unidad,
+                        email,
+                        telefono,
+                        oficina,
+                        direccion);
+                functionaryDao.create(functionary);
 
                 // Time to wait not to do DDoS.
                 try {
@@ -124,12 +153,22 @@ public class App {
                 } catch (InterruptedException e) {
                     log.error("Thread is interrupted either before or during the activity. Details: {}", e);
                 }
+
+                // ID real to csv file.
+                id++;
             }
         }
 
         // End of record insertion.
         printWriter.close();
+        connectionSource.close();
         log.info("End of insertions.");
+
+        /*
+        Thanks to
+        ORM Lite documentation https://ormlite.com/javadoc/ormlite-core/doc-files/ormlite_2.html#Using
+        Save scv in txt http://decodigo.com/java-crear-archivos-de-texto
+         */
 
     }
 

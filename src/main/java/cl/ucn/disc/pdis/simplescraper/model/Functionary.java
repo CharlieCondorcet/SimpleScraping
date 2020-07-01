@@ -31,43 +31,43 @@ public final class Functionary {
     /**
      * The Nombre.
      */
-    @DatabaseField(canBeNull = false, index = true)
+    @DatabaseField(canBeNull = false, unique = true)
     private String nombre;
 
     /**
      * The Cargo.
      */
-    @DatabaseField(canBeNull = false)
+    @DatabaseField(canBeNull = true)
     private String cargo;
 
     /**
      * The Unidad.
      */
-    @DatabaseField(canBeNull = false)
+    @DatabaseField(canBeNull = true)
     private String unidad;
 
     /**
      * The E-Mail.
      */
-    @DatabaseField(canBeNull = false)
+    @DatabaseField(canBeNull = true)
     private String email;
 
     /**
      * The Telefono.
      */
-    @DatabaseField(canBeNull = false)
+    @DatabaseField(canBeNull = true)
     private String telefono;
 
     /**
      * The Oficina.
      */
-    @DatabaseField(canBeNull = false)
+    @DatabaseField(canBeNull = true)
     private String oficina;
 
     /**
      * The Direccion.
      */
-    @DatabaseField(canBeNull = false)
+    @DatabaseField(canBeNull = true)
     private String direccion;
 
     /**
