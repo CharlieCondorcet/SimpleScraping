@@ -20,7 +20,7 @@ import com.j256.ormlite.table.DatabaseTable;
  * @author Charlie Condorcet.
  */
 @DatabaseTable(tableName = "functionary")
-public class Functionary {
+public final class Functionary {
 
     /**
      * The id: Primary Key.
