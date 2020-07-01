@@ -26,6 +26,8 @@ import java.sql.SQLException;
 
 /**
  * Class to format the data and insert to db.
+ *
+ * @author Charlie Condorcet.
  */
 public class DbInteraction {
 

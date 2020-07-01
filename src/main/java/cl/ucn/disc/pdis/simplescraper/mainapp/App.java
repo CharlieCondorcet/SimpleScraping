@@ -100,10 +100,6 @@ public class App {
                 oficina = document.getElementById("lblOficina").text();
                 direccion = document.getElementById("lblDireccion").text();
 
-                if (direccion.length() == 0) {
-                    log.debug("VACIOS");
-                }
-
                 // Concatenation of Functionary data.
                 StringBuilder sbFunctionary = new StringBuilder();
                 sbFunctionary.append(id).append(",")
@@ -118,21 +114,29 @@ public class App {
                 log.debug("New identified: {}", sbFunctionary.toString());
 
                 // Add new valid functionary to dabatase.
-                theDatabase.formatToDatabase(nombre, cargo, unidad, email, telefono, oficina, direccion);
+                boolean notExistInDb = theDatabase.formatToDatabase(nombre, cargo, unidad, email, telefono, oficina, direccion);
 
-                // Add new valid functionary to csv file.
-                printWriter.println(sbFunctionary.toString());
+                // Check if the new functionary is added. The db and csv must be same.
+                if (notExistInDb) {
 
-                // Time to wait not to do DDoS.
-                try {
-                    Thread.sleep(1000 + random.nextInt(1000));
+                    // Add new valid functionary to csv file.
+                    printWriter.println(sbFunctionary.toString());
 
-                } catch (InterruptedException e) {
-                    log.error("Thread is interrupted either before or during the activity. Details: {}", e.getMessage());
+                    // Time to wait not to do DDoS.
+                    try {
+                        Thread.sleep(1000 + random.nextInt(1000));
+
+                    } catch (InterruptedException e) {
+                        log.error("Thread is interrupted either before or during the activity. Details: {}", e.getMessage());
+                    }
+
+                    // ID real to csv file.
+                    id++;
+
+                } else {
+                    log.info("The new functionary is not added.");
                 }
 
-                // ID real to csv file.
-                id++;
             }
         }
 
