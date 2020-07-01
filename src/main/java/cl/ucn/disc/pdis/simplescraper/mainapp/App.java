@@ -130,6 +130,7 @@ public class App {
         // End of record insertion.
         printWriter.close();
         log.info("End of insertions.");
+
     }
 
 }

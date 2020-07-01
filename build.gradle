@@ -46,6 +46,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0-M1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0-M1'
 
-
+    // Xerial https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
+    implementation 'org.xerial:sqlite-jdbc:3.32.3'
 
 }
