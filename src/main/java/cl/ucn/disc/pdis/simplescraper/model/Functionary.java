@@ -25,7 +25,7 @@ public final class Functionary {
     /**
      * The id: Primary Key.
      */
-    @DatabaseField(canBeNull = false, id = true)
+    @DatabaseField(canBeNull = false, generatedId = true)
     private int id;
 
     /**
@@ -80,7 +80,6 @@ public final class Functionary {
     /**
      * Principal Constructor.
      *
-     * @param id
      * @param nombre
      * @param cargo
      * @param unidad
@@ -89,8 +88,7 @@ public final class Functionary {
      * @param oficina
      * @param direccion
      */
-    public Functionary(int id, String nombre, String cargo, String unidad, String email, String telefono, String oficina, String direccion) {
-        this.id = id;
+    public Functionary(String nombre, String cargo, String unidad, String email, String telefono, String oficina, String direccion) {
         this.nombre = nombre;
         this.cargo = cargo;
         this.unidad = unidad;

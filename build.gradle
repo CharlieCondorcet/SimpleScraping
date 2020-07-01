@@ -13,6 +13,11 @@ plugins {
     id 'java'
 }
 
+test {
+    useJUnitPlatform()
+}
+
+
 group 'cl.ucn.disc.pdis.simplescraper'
 version '1.0-SNAPSHOT'
 
@@ -33,5 +38,14 @@ dependencies {
     // ORM Lite
     implementation 'com.j256.ormlite:ormlite-core:5.1'
     implementation 'com.j256.ormlite:ormlite-jdbc:5.1'
+
+    // Database driver H2
+    implementation 'com.h2database:h2:1.4.200'
+
+    // JUnit
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0-M1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0-M1'
+
+
 
 }
