@@ -29,7 +29,7 @@ import java.sql.SQLException;
  *
  * @author Charlie Condorcet.
  */
-public class DbInteraction {
+public final class DbInteraction {
 
     /**
      * The Logger.

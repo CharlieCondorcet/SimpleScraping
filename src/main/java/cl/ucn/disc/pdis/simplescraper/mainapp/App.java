@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.SocketTimeoutException;
 import java.sql.SQLException;
 import java.util.Random;
 
@@ -44,14 +45,15 @@ public class App {
 
         /*
         El "cod" o el numero id al final de la url, en primer semestre de 2020, no sobrepasa los 29800.
-        Esto ultimo verificado buscando ultimos profesores agregados este semestre con id 29600 aprox.
+        Esto ultimo verificado buscando ultimos profesores agregados este semestre con id 29700 aprox.
         */
 
         /**
          * Auxiliaries.
          */
-        int id = 0;
-        int maxCod = 100;
+        int id = 1;
+        int canVoids = 0;
+        int maxCod = 29700;
         String url = "http://online.ucn.cl/directoriotelefonicoemail/fichaGenerica/?cod=";
         PrintWriter printWriter = new PrintWriter("records.txt", "UTF-8");
 
@@ -76,12 +78,21 @@ public class App {
 
         log.info("Initialization of scraping..");
 
-        for (int i = 0; i < maxCod; i++) {
+        for (int i = 1; i < maxCod; i++) {
 
             // Build the URL to check the data.
             StringBuilder actualUrl = new StringBuilder();
             actualUrl.append(url).append(i);
-            Document document = Jsoup.connect(actualUrl.toString()).get();
+            Document document = null;
+
+            // Timeout in server.
+            try {
+                document = Jsoup.connect(actualUrl.toString()).get();
+
+            } catch (SocketTimeoutException e) {
+                log.error("Timeout for http request. Details: {}", e.getMessage());
+                continue;
+            }
 
             // Verify the index value.
             nombre = document.getElementById("lblNombre").text();
@@ -95,7 +106,9 @@ public class App {
 
                 telefono = document.getElementById("lblTelefono").text();
                 // Formate to fone number.
-                telefono = telefono.substring(5, telefono.length());
+                if (!telefono.isEmpty()) {
+                    telefono = telefono.substring(5, telefono.length());
+                }
 
                 oficina = document.getElementById("lblOficina").text();
                 direccion = document.getElementById("lblDireccion").text();
@@ -137,6 +150,19 @@ public class App {
                     log.info("The new functionary is not added.");
                 }
 
+            } else {
+                // If 10 connections to the server happen in a row with no data returned.
+                canVoids++;
+                if (canVoids >= 10) {
+                    // Time to wait not to do DDoS.
+                    try {
+                        Thread.sleep(1000 + random.nextInt(1000));
+
+                    } catch (InterruptedException e) {
+                        log.error("Thread is interrupted either before or during the activity. Details: {}", e.getMessage());
+                    }
+                    canVoids = 0;
+                }
             }
         }
 
