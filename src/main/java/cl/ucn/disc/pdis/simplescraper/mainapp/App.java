@@ -53,7 +53,7 @@ public class App {
          */
         int id = 1;
         int canVoids = 0;
-        int maxCod = 29700;
+        int maxCod = 29800;
         String url = "http://online.ucn.cl/directoriotelefonicoemail/fichaGenerica/?cod=";
         PrintWriter printWriter = new PrintWriter("records.txt", "UTF-8");
 
@@ -91,11 +91,15 @@ public class App {
 
             } catch (SocketTimeoutException e) {
                 log.error("Timeout for http request. Details: {}", e.getMessage());
-                continue;
             }
 
             // Verify the index value.
-            nombre = document.getElementById("lblNombre").text();
+            try {
+                nombre = document.getElementById("lblNombre").text();
+            } catch (NullPointerException e) {
+                log.error("Value null for timout recent. Details: {}", e);
+                nombre = "";
+            }
 
             if (!nombre.isEmpty()) {
 
@@ -151,6 +155,7 @@ public class App {
                 }
 
             } else {
+
                 // If 10 connections to the server happen in a row with no data returned.
                 canVoids++;
                 if (canVoids >= 10) {
@@ -164,6 +169,7 @@ public class App {
                     canVoids = 0;
                 }
             }
+
         }
 
         // End of record insertion.
